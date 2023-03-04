@@ -1,5 +1,5 @@
 import express from 'express';
-import { server } from "./config/app";
+import { server } from './config/app';
 import { routes } from './controlls/routesControlls/routeControll';
 
 
