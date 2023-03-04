@@ -7,7 +7,7 @@ let controllUsers = new controllUser();
 
 
 routes.post('/create/user', async (request: Request, response: Response) => {
-    response.send('Testando')
+    controllUsers.createUser(request, response)
 })
 
 routes.get('/list/users', async (request: Request, response: Response) => {
