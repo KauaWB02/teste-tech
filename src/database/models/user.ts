@@ -20,9 +20,17 @@ export class modelUser {
 
 	public async updateUser(idUser: number, objecUpdate: user) {
 		try {
-			await connection('TB_USER').update(objecUpdate).where('ID_USER', idUser);
+			await connection('TB_USER')
+				.update({
+					NAME: objecUpdate.name,
+					EMAIL: objecUpdate.email,
+					CPF: objecUpdate.cpf,
+					PASSWORD: objecUpdate.password,
+					PHONE: objecUpdate.phone,
+					DT_CREATION: connection.raw(`CURRENT_TIMESTAMP`)
+				}).where('ID_USER', idUser);
 
-		} catch (e) {
+		} catch (e: any) {
 			console.log(e)
 			throw { message: `Erro ao tentar atualiar usuário` }
 		}
