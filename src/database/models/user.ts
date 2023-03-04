@@ -1,8 +1,8 @@
-import { connection } from "../connection";
-import { createUser } from '../../interface/createUser'
+import { connection } from '../connection';
+import { user } from '../../interface/createUser'
 export class modelUser {
 
-	public async createUser(dadosUser: createUser) {
+	public async createUser(dadosUser: user) {
 		try {
 			await connection('TB_USER')
 				.insert({
@@ -18,6 +18,16 @@ export class modelUser {
 		}
 	}
 
+	public async updateUser(idUser: number, objecUpdate: user) {
+		try {
+			await connection('TB_USER').update(objecUpdate).where('ID_USER', idUser);
+
+		} catch (e) {
+			console.log(e)
+			throw { message: `Erro ao tentar atualiar usuário` }
+		}
+	}
+
 	public async listUsers() {
 		let users: Array<object> = [];
 		try {
@@ -28,7 +38,6 @@ export class modelUser {
 		} catch (e) {
 			console.log(e)
 			throw { message: `Ocorreu algo de errado na listagem de usuarios` };
-
 		}
 		return users;
 	}
