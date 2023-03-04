@@ -1,16 +1,21 @@
-import { Router, Request, Response, response } from "express";
-import { controllUser } from "../systemControlls/user";
+import { Router, Request, Response } from 'express';
+import { controllUser } from '../systemControlls/user';
 
 export const routes: Router = Router();
 
+const prefix = '/tech'
+
 let controllUsers = new controllUser();
 
+routes.post(`${prefix}/create/user`, async (request: Request, response: Response) => {
+    controllUsers.createUser(request, response);
+});
 
-routes.post('/create/user', async (request: Request, response: Response) => {
-    controllUsers.createUser(request, response)
-})
+routes.put(`${prefix}/update/user`, async (request: Request, response: Response) => {
+    controllUsers.updateUser(request, response);
+});
 
-routes.get('/list/users', async (request: Request, response: Response) => {
+routes.get(`${prefix}/list/users`, async (request: Request, response: Response) => {
     controllUsers.listUsers(request, response);
 });
 
