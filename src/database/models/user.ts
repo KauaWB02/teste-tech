@@ -1,5 +1,5 @@
 import { connection } from "../connection";
-
+import { createUser } from '../../interface/createUser'
 export class modelUser {
 
 	public async createUser(dadosUser: createUser) {
