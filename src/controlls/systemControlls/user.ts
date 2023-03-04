@@ -53,14 +53,25 @@ export class controllUser {
 	public async updateUser(request: Request, response: Response) {
 		let objectReturn = {
 			codeStatus: 200,
-			message: null
+			message: ''
 		}
 
 		try {
-			let { idUser, infoDados } = request.body;
-			console.log(idUser, infoDados)
-			// await this.modelUsers.updateUser()
-		} catch (e) {
+			let { idUser, dataInfo } = request.body;
+
+			for (let key in dataInfo) {
+				if (Object.prototype.hasOwnProperty.call(dataInfo, key)) {
+					if (dataInfo[key] == '') {
+						delete dataInfo[key]
+					}
+				}
+			}
+
+			await this.modelUsers.updateUser(idUser, dataInfo).then((data: any) => {
+				objectReturn.message = `Usuário atualizado com sucesso!`;
+			})
+
+		} catch (e: any) {
 			console.log(e)
 			objectReturn.codeStatus = 500;
 			objectReturn.message = e.message;
