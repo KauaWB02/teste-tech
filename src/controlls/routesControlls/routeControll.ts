@@ -5,6 +5,11 @@ export const routes: Router = Router();
 
 let controllUsers = new controllUser();
 
+
+routes.post('/create/user', async (request: Request, response: Response) => {
+    response.send('Testando')
+})
+
 routes.get('/list/users', async (request: Request, response: Response) => {
     controllUsers.listUsers(request, response);
 });
