@@ -1,7 +1,9 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 import { modelUser } from '../../database/models/user'
 
 export class controllUser {
+
+	private modelUsers = new modelUser();
 
 	public async createUser(request: Request, response: Response) {
 		let objectReturn = {
@@ -34,8 +36,7 @@ export class controllUser {
 				phone: phone,
 			}
 
-			let create = new modelUser();
-			await create.createUser(dados)
+			await this.modelUsers.createUser(dados)
 				.then(() => {
 					objectReturn.message = 'Usuário cadastrado com sucesso!'
 				})
@@ -49,23 +50,41 @@ export class controllUser {
 
 	}
 
+	public async updateUser(request: Request, response: Response) {
+		let objectReturn = {
+			codeStatus: 200,
+			message: null
+		}
+
+		try {
+			let { idUser, infoDados } = request.body;
+			console.log(idUser, infoDados)
+			// await this.modelUsers.updateUser()
+		} catch (e) {
+			console.log(e)
+			objectReturn.codeStatus = 500;
+			objectReturn.message = e.message;
+		} finally {
+			response.status(objectReturn.codeStatus).send(objectReturn.message);
+		}
+	}
+
 	public async listUsers(request: Request, response: Response) {
-		let objecErro = {
+		let objectReturn = {
 			codeStatus: 200,
 			message: null
 		}
 		let list: Array<object> = [];
 		try {
 
-			let modelUsers = new modelUser();
-			list = await modelUsers.listUsers();
+			list = await this.modelUsers.listUsers();
 
 		} catch (e: any) {
 			console.log(e)
-			objecErro.codeStatus = 500;
-			objecErro.message = e.message;
+			objectReturn.codeStatus = 500;
+			objectReturn.message = e.message;
 		} finally {
-			response.status(objecErro.codeStatus).send(objecErro.message || list)
+			response.status(objectReturn.codeStatus).send(objectReturn.message || list)
 		}
 
 	}
