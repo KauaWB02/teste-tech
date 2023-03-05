@@ -99,4 +99,29 @@ export class controllUser {
 		}
 
 	}
+
+	public async deleteUser(request: Request, response: Response) {
+		let objectReturn = {
+			codeStatus: 200,
+			message: ''
+		}
+
+		try {
+			let { idUser } = request.query
+
+			if (!idUser)
+				throw { message: `idUser não foi encontrado nos parametros de URL, favor verificar!`, codeStatus: 400 };
+
+			await this.modelUsers.deleteUser(Number(idUser)).then((data) => {
+				console.log(data)
+				objectReturn.message = 'Usuário excluido com sucesso!';
+			})
+
+		} catch (e: any) {
+			objectReturn.codeStatus = e.codeStatus;
+			objectReturn.message = e.message;
+		} finally {
+			response.status(objectReturn.codeStatus).send(objectReturn.message);
+		}
+	}
 }

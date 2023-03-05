@@ -49,4 +49,13 @@ export class modelUser {
 		}
 		return users;
 	}
+
+	public async deleteUser(idUser: number) {
+		try {
+			await connection('TB_USER as user').delete().where('ID_USER', idUser);
+		} catch (e) {
+			console.log(e);
+			throw { message: `Erro ao tentar excluir usuário!`, codeStatus: 500 };
+		}
+	}
 }
