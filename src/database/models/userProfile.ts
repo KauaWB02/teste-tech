@@ -3,16 +3,16 @@ import { userProfile } from '../../interface/createUserProfile'
 
 export class modelUserProfile {
 
-	public async create(table: string, objectInsert: userProfile) {
+	public async create(table: string, objectInsert: object) {
 		try {
 			await connection(table)
 				.insert(objectInsert)
 		} catch (e) {
-			throw { message: `Ocorreu algo de errado na criação de usuário [${e}]` }
+			throw { message: `Ocorreu algo de errado na criação de usuário` }
 		}
 	}
 
-	public async update(table: string, objecUpdate: userProfile, objecWhere: object) {
+	public async update(table: string, objecUpdate: object, objecWhere: object) {
 		try {
 
 			await connection(table)
@@ -47,7 +47,7 @@ export class modelUserProfile {
 			}
 
 			users = await queryBuild;
-			
+
 		} catch (e) {
 			console.log(e)
 			throw { message: `Ocorreu algo de errado na listagem de usuarios` };
