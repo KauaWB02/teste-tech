@@ -26,10 +26,11 @@ export class controllProfile {
 				throw { message: `Parametro ISADMIN não encontrado, favor verificar!`, codeStatus: 400 }
 			}
 
-			let dados: userProfile = {
-				name: name,
-				idUser: idUser,
-				isAdmin: isAdmin
+			let dados = {
+				NAME: name,
+				ID_USER: idUser,
+				IS_ADMIN: isAdmin == 'N' ? false : true,
+				DT_CREATION: new Date()
 			}
 
 			await this.modelUsers.create('TB_PROFILE', dados)
@@ -63,7 +64,14 @@ export class controllProfile {
 				}
 			}
 
-			await this.modelUsers.update('TB_PROFILE', dataInfo, { ID_PROFILE: idProfile }).then(() => {
+			let dados = {
+				NAME: dataInfo.name,
+				ID_USER: dataInfo.idProfile,
+				IS_ADMIN: dataInfo.isAdmin == 'N' ? false : true,
+				DT_CREATION: new Date()
+			}
+
+			await this.modelUsers.update('TB_PROFILE', dados, { ID_PROFILE: idProfile }).then(() => {
 				objectReturn.message = `Perfil atualizado com sucesso!`;
 			})
 
@@ -103,16 +111,16 @@ export class controllProfile {
 		}
 
 		try {
-			let { idUser } = request.query
+			let { idProfile } = request.query
 
-			if (!idUser)
-				throw { message: `idUser não foi encontrado nos parametros de URL, favor verificar!`, codeStatus: 400 };
+			if (!idProfile)
+				throw { message: `idProfile não foi encontrado nos parametros de URL, favor verificar!`, codeStatus: 400 };
 
 			let objectWhere = {
-				ID_USER: Number(idUser)
+				ID_PROFILE: Number(idProfile)
 			}
 			await this.modelUsers.delete('TB_PROFILE', objectWhere).then(() => {
-				objectReturn.message = 'Usuário excluido com sucesso!';
+				objectReturn.message = 'Perfil excluido com sucesso!';
 			})
 
 		} catch (e: any) {
@@ -120,6 +128,33 @@ export class controllProfile {
 			objectReturn.message = e.message;
 		} finally {
 			response.status(objectReturn.codeStatus).send(objectReturn.message);
+		}
+	}
+
+	public async listProfilesOneUser(request: Request, response: Response) {
+		let objectReturn = {
+			codeStatus: 200,
+			message: '',
+		}
+		let profiles: any;
+
+		try {
+
+			let { idUser } = request.query;
+
+			console.log(request.params)
+
+			if (!idUser) {
+				throw { message: `Parametro IDUSER não encontrado na URL, favor verificar!`, codeStatus: 400 };
+			}
+
+			profiles = await this.modelUsers.list('TB_PROFILE', { ID_USER: Number(idUser) });
+
+		} catch (e: any) {
+			objectReturn.codeStatus = e.codeStatus;
+			objectReturn.message = e.message;
+		} finally {
+			response.status(objectReturn.codeStatus).send(objectReturn.message || profiles)
 		}
 	}
 }
