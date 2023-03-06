@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { modelUserProfile } from '../../database/models/userProfile'
-import { userProfile } from '../../interface/createUserProfile';
 
 export class controllUser {
 
@@ -29,12 +28,13 @@ export class controllUser {
 				throw { message: `Você precisa digitar um CPF de usuário!`, codeStatus: 400 }
 			}
 
-			let dados: userProfile = {
-				name: name,
-				email: email,
-				cpf: cpf,
-				password: password,
-				phone: phone,
+			let dados = {
+				NAME: name,
+				EMAIL: email,
+				CPF: cpf,
+				PASSWORD: password,
+				PHONE: phone,
+				DT_CREATION: new Date()
 			}
 
 			await this.modelUsers.create('TB_USER', dados)
@@ -134,4 +134,7 @@ export class controllUser {
 			response.status(objectReturn.codeStatus).send(objectReturn.message);
 		}
 	}
+
+	
+
 }
