@@ -37,6 +37,12 @@ export class controllUser {
 				DT_CREATION: new Date()
 			}
 
+			let exist = await this.modelUsers.list('TB_USER', null, { EMAIL: dados.EMAIL, CPF: dados.CPF }, true);
+
+			if (exist) {
+				throw { message: `E-mail ou cpf incorretos, favor verificar!`, codeStatus: 400 };
+			}
+
 			await this.modelUsers.create('TB_USER', dados)
 				.then(() => {
 					objectReturn.message = 'Usuário cadastrado com sucesso!'
@@ -121,6 +127,8 @@ export class controllUser {
 				ID_USER: Number(idUser)
 			}
 
+			await this.modelUsers.delete('TB_PROFILE', { ID_USER: idUser });
+
 			await this.modelUsers.delete('TB_USER', objectWhere).then(() => {
 				objectReturn.message = 'Usuário excluido com sucesso!';
 			});
@@ -135,6 +143,6 @@ export class controllUser {
 		}
 	}
 
-	
+
 
 }

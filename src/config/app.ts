@@ -17,3 +17,8 @@ export const smtp = {
 	user: process.env.MAIL_USER,
 	pass: process.env.MAIL_PASS
 }
+
+export const jwt = {
+	secret: String(process.env.JWT_SECURE),
+	expiresIn: String(process.env.JWT_EXPIRESIN_TOKEN)
+}
