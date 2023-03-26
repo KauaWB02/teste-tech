@@ -28,26 +28,26 @@ function verifyJwt(request: Request, response: Response, next: NextFunction) {
 	let { authorization } = request.headers;
 
 	if (!authorization) {
-		return response.status(401).send();
+		return response.status(401).send('Usuário não autorizado!');
 	}
 
 	let token = authorization.replace("Bearer", "").trim();
 
 	try {
 		const data = jwt.verify(token, jwtEnv.secret);
+		console.log(data)
 		let { idUser } = data as payloadToken;
 
 		request.idUser = idUser;
 
 		next();
 	} catch (e) {
-		response.status(401).send();
+		console.log(e)
+		response.status(401).send('Usuário não autorizado!');
 	}
 }
 
-routes.get(
-	`${prefix}/details`,
-	verifyJwt,
+routes.get(`${prefix}/details`, verifyJwt,
 	async (request: Request, response: Response) => {
 		let objectReturn = {
 			codeStatus: 200,
@@ -149,43 +149,29 @@ routes.post(
 	}
 );
 
-routes.post(
-	`${prefix}/login/user`,
-	async (request: Request, response: Response) => {
-		login.verifyUser(request, response);
-	}
+routes.post(`${prefix}/login/user`, async (request: Request, response: Response) => {
+	login.verifyUser(request, response);
+}
 );
 
-routes.get(
-	`${prefix}/list/users`,
-	verifyJwt,
-	async (request: Request, response: Response) => {
-		user.listUsers(request, response);
-	}
+routes.get(`${prefix}/list/users`, verifyJwt, async (request: Request, response: Response) => {
+	user.listUsers(request, response);
+}
 );
 
-routes.post(
-	`${prefix}/create/user`,
-	verifyJwt,
-	async (request: Request, response: Response) => {
-		user.createUser(request, response);
-	}
+routes.post(`${prefix}/create/user`, verifyJwt, async (request: Request, response: Response) => {
+	user.createUser(request, response);
+}
 );
 
-routes.put(
-	`${prefix}/update/user`,
-	verifyJwt,
-	async (request: Request, response: Response) => {
-		user.updateUser(request, response);
-	}
+routes.put(`${prefix}/update/user`, verifyJwt, async (request: Request, response: Response) => {
+	user.updateUser(request, response);
+}
 );
 
-routes.delete(
-	`${prefix}/delete/user`,
-	verifyJwt,
-	async (request: Request, response: Response) => {
-		user.deleteUser(request, response);
-	}
+routes.delete(`${prefix}/delete/user`, verifyJwt, async (request: Request, response: Response) => {
+	user.deleteUser(request, response);
+}
 );
 
 // rotar para perfils de usuários

@@ -20,13 +20,13 @@ export class controllLogin {
       if (!emailCpf)
         throw {
           message: `Campo EMAILCPF não encontrado, este campo é permitido CPF ou EMAIL, favor verificar!`,
-          codeStatus: 400,
+          codeStatus: 401,
         };
 
       if (!password)
         throw {
           message: `Campo PASSWORD não encontrado, favor verificar!`,
-          codeStatus: 400,
+          codeStatus: 401,
         };
 
       let objectWhere = {
@@ -65,7 +65,7 @@ export class controllLogin {
       objectReturn.codeStatus = e.codeStatus || 500;
       objectReturn.message = e.message;
     } finally {
-      response.status(objectReturn.codeStatus).send(objectReturn.dataInfo);
+      response.status(objectReturn.codeStatus).send(Object.keys(objectReturn.dataInfo).length == 0 ? objectReturn.message : objectReturn.dataInfo);
     }
   }
 
@@ -106,6 +106,7 @@ export class controllLogin {
       objectReturn.codeStatus = e.codeStatus;
       objectReturn.message = e.message;
     } finally {
+
       response.status(objectReturn.codeStatus).send(objectReturn.message);
     }
   }

@@ -50,7 +50,7 @@ export class modelUserProfile {
 
 		} catch (e) {
 			console.log(e)
-			throw { message: `Ocorreu algo de errado na listagem de usuarios` };
+			throw { message: `Algo inesperado ocorreu, favor entrar em contato com administrador!` };
 		}
 		return users;
 	}
